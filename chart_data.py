@@ -24,7 +24,7 @@ def format_dataframe(df):
     for _, row in df.iterrows():
         row_data = {}
         for col in df.columns:
-            if col != "Dataset":
+            if col != df.columns[0]  :
                 value = row[col]
                 row_data[col] = {
                     "value": value,
@@ -66,7 +66,7 @@ app.layout = html.Div(
 def update_table(layout):
     """Switch between default and transposed layouts."""
     if layout == "transpose":
-        table_df = df.set_index("Dataset").transpose().reset_index().rename(columns={"index": "Model"})
+        table_df = df.set_index(df.columns[0]).transpose().reset_index().rename(columns={"index": "Model"})
     else:
         table_df = df
 
@@ -97,14 +97,7 @@ def update_table(layout):
         style_table={"overflowX": "auto", "margin": "0 auto"},
         style_cell_conditional=[
             {
-                "if": {"column_id": "Dataset"},
-                "position": "sticky",
-                "left": 0,
-                "backgroundColor": "white",
-                "zIndex": 1,
-            },
-            {
-                "if": {"column_id": "Model"},
+                "if": {"column_id": table_df.columns[0]},
                 "position": "sticky",
                 "left": 0,
                 "backgroundColor": "white",
